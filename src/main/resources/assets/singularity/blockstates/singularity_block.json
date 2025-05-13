@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "singularity:block/singularity_block" }
+  }
+}

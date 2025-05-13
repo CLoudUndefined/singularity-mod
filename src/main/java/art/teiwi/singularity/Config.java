@@ -4,28 +4,15 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
-
-// An example config class. This is not required, but it's a good idea to have one to keep your config organized.
-// Demonstrates how to use Forge's config APIs
 @Mod.EventBusSubscriber(modid = Singularity.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Config
 {
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
-    // Example:
-    // private static final ForgeConfigSpec.BooleanValue MY_BOOLEAN_VALUE = BUILDER
-    //         .comment("My boolean value description")
-    //         .define("myBooleanValue", true);
-
     static final ForgeConfigSpec SPEC = BUILDER.build();
-
-    // Example:
-    // public static boolean myBooleanValue;
 
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event)
     {
-        // Example:
-        // myBooleanValue = MY_BOOLEAN_VALUE.get();
     }
 }
