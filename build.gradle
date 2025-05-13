@@ -5,8 +5,8 @@ plugins {
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
 }
 
-version = '1.0.0'
-group = 'art.teiwi.singularity'
+version = mod_version
+group = mod_group_id
 
 base {
     archivesName = 'singularity'
@@ -134,11 +134,11 @@ dependencies {
 // See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
 tasks.named('processResources', ProcessResources).configure {
     var replaceProperties = [
-            minecraft_version: '1.20.1', minecraft_version_range: '1.20.1',
-            forge_version: '47.4.0', forge_version_range: '[47.2.0,48)',
-            loader_version_range: '[47,)',
-            mod_id: 'singularity', mod_name: 'Singularity', mod_license: 'MIT', mod_version: '1.0.0',
-            mod_authors: 'Teiwo, NotFrieN', mod_description: 'Description about nothing',
+            minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
+            forge_version: forge_version, forge_version_range: forge_version_range,
+            loader_version_range: loader_version_range,
+            mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
+            mod_authors: mod_authors, mod_description: mod_description,
     ]
     inputs.properties replaceProperties
 
@@ -151,8 +151,8 @@ tasks.named('processResources', ProcessResources).configure {
 tasks.named('jar', Jar).configure {
     manifest {
         attributes([
-                'Specification-Title'     : 'singularity',
-                'Specification-Vendor'    : 'Teiwo, NotFrieN',
+                'Specification-Title'     : mod_name,
+                'Specification-Vendor'    : mod_authors,
                 'Specification-Version'   : '1', // We are version 1 of ourselves
                 'Implementation-Title'    : project.name,
                 'Implementation-Version'  : project.jar.archiveVersion,
