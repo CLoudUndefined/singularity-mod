@@ -1,4 +1,4 @@
-package art.teiwi.singularity.blocks;
+package art.teiwi.singularity.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,13 +14,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.BlockHitResult;
+import art.teiwi.singularity.blockentity.SingularityBlockEntity;
+import net.minecraft.world.level.block.Block;
+
 
 import javax.annotation.Nullable;
 
 public class SingularityBlock extends BaseEntityBlock {
     private static final VoxelShape SHAPE = Block.box(4, 0, 4, 12, 16, 12); // размер как у Anchor
 
-    protected SingularityBlock(Properties properties) {
+    public SingularityBlock(Properties properties) {
         super(properties);
     }
 
@@ -41,11 +46,21 @@ public class SingularityBlock extends BaseEntityBlock {
     }
 
     @Override
-    public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        ItemStack heldItem = player.getItemInHand(hand);
+        
         if (!level.isClientSide()) {
-            var be = level.getBlockEntity(pos);
-            if (be instanceof SingularityBlockEntity singularity && singularity.canPlayerInteract(player)) {
-                NetworkHooks.openScreen((ServerPlayer) player, singularity, pos);
+            BlockEntity be = level.getBlockEntity(pos);
+            if (be instanceof SingularityBlockEntity singularity) {
+                if (!heldItem.isEmpty()) {
+                    if (singularity.canPlayerInteract(player)) {
+                        singularity.addItem(heldItem, player);
+                        return InteractionResult.CONSUME;
+                    }
+                } 
+                else {
+                    NetworkHooks.openScreen((ServerPlayer) player, singularity, pos);
+                }
             }
         }
         return InteractionResult.sidedSuccess(level.isClientSide());
