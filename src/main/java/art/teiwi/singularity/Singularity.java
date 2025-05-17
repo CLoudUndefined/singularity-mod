@@ -31,13 +31,22 @@ public class Singularity
     public Singularity(FMLJavaModLoadingContext context)
     {
         IEventBus modEventBus = context.getModEventBus();
+
         modEventBus.addListener(this::commonSetup);
+        
         ModBlocks.register(modEventBus);
+
         ModBlockEntities.register(modEventBus);
+
         ModMenuTypes.register(modEventBus);
+
         ITEMS.register(modEventBus);
-        MinecraftForge.EVENT_BUS.register(this);
+
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, SingularityConfig.SPEC);
+
+
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
