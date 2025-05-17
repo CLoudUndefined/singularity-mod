@@ -102,7 +102,10 @@ public class SingularityBlockEntity extends BlockEntity implements MenuProvider 
         for (var entry : items.entrySet()) {
             String itemName = entry.getKey();
             int count = entry.getValue();
-            ItemStack stack = new ItemStack(ForgeRegistries.ITEMS.getValue(ResourceLocation.parse(itemName)));
+            var item = ForgeRegistries.ITEMS.getValue(ResourceLocation.parse(itemName));
+            if (item == null) continue;
+
+            ItemStack stack = new ItemStack(item, count);
             Containers.dropItemStack(level, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), stack);
         }
         items.clear();

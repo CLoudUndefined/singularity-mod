@@ -1,7 +1,7 @@
 package art.teiwi.singularity.blockentity;
 
 import art.teiwi.singularity.Singularity;
-import art.teiwi.singularity.block.ModBlocks;
+import art.teiwi.singularity.ModBlocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
