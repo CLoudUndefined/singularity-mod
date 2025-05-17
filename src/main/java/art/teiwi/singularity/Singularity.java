@@ -10,17 +10,21 @@ import net.minecraftforge.fml.common.Mod;
 import art.teiwi.singularity.screen.SingularityScreen;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import art.teiwi.singularity.block.ModBlocks;
+import art.teiwi.singularity.ModBlocks;
 import art.teiwi.singularity.blockentity.ModBlockEntities;
 import art.teiwi.singularity.menu.ModMenuTypes;
+import art.teiwi.singularity.config.SingularityConfig;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.ModLoadingContext;
+
 @Mod(Singularity.MODID)
 public class Singularity
 {
@@ -35,16 +39,11 @@ public class Singularity
         modEventBus.addListener(this::commonSetup);
         
         ModBlocks.register(modEventBus);
-
         ModBlockEntities.register(modEventBus);
-
         ModMenuTypes.register(modEventBus);
+        ModItems.ITEMS.register(modEventBus);
 
-        ITEMS.register(modEventBus);
-
-        context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, SingularityConfig.SPEC);
-
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, SingularityConfig.COMMON_CONFIG);
 
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -53,11 +52,13 @@ public class Singularity
     {
         LOGGER.info("Mod common setup");
     }
+
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event)
     {
         LOGGER.info("Mod server starting");
     }
+
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents
     {
