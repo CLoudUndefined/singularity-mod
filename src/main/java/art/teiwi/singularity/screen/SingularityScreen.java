@@ -9,17 +9,11 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class SingularityScreen extends AbstractContainerScreen<SingularityMenu> {
     private static final ResourceLocation TEXTURE =
@@ -76,40 +70,5 @@ public class SingularityScreen extends AbstractContainerScreen<SingularityMenu> 
         this.renderBackground(guiGraphics);
         super.render(guiGraphics, mouseX, mouseY, delta);
         renderTooltip(guiGraphics, mouseX, mouseY);
-        
-        renderItemsList(guiGraphics);
-    }
-    
-    private void renderItemsList(GuiGraphics guiGraphics) {
-        Map<String, Integer> items = menu.blockEntity.getItemsMap();
-        if (items == null || items.isEmpty()) {
-            return;
-        }
-        
-        int x = (width - imageWidth) / 2;
-        int y = (height - imageHeight) / 2;
-        int startY = y + 170;
-        
-        guiGraphics.drawString(font, Component.literal("Stored Items:"), x + 8, startY - 10, 0xFFFFFF);
-        
-        int itemY = startY;
-        for (Map.Entry<String, Integer> entry : items.entrySet()) {
-            String itemId = entry.getKey();
-            int count = entry.getValue();
-            
-            Item item = ForgeRegistries.ITEMS.getValue(ResourceLocation.parse(itemId));
-            if (item != null) {
-                ItemStack stack = new ItemStack(item);
-                
-                guiGraphics.renderItem(stack, x + 8, itemY);
-                
-                String itemText = item.getDescription().getString() + " x" + count;
-                guiGraphics.drawString(font, itemText, x + 28, itemY + 4, 0xFFFFFF);
-                
-                itemY += 18;
-                
-                if (itemY > startY + 90) break;
-            }
-        }
     }
 }
