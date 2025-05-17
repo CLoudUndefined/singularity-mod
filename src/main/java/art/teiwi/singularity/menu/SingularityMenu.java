@@ -28,11 +28,6 @@ public class SingularityMenu extends AbstractContainerMenu {
         addPlayerInventory(playerInventory);
         addPlayerHotbar(playerInventory);
 
-
-        this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
-            this.addSlot(new SlotItemHandler(handler, 0, 80, 35));
-        });
-
         addDataSlots(data);
     }
 
@@ -49,44 +44,12 @@ public class SingularityMenu extends AbstractContainerMenu {
         throw new IllegalStateException("Block entity is not correct! " + be);
     }
 
-    // Реализация quickMoveStack для Shift+Click
     @Override
     public ItemStack quickMoveStack(Player playerIn, int index) {
-        ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.slots.get(index);
-        
-        if (slot != null && slot.hasItem()) {
-            ItemStack itemstack1 = slot.getItem();
-            itemstack = itemstack1.copy();
-            
-            // Если индекс слота меньше 36, то это слот инвентаря игрока
-            if (index < 36) {
-                // Пытаемся перенести в слот сингулярности
-                if (!this.moveItemStackTo(itemstack1, 36, 37, false)) {
-                    return ItemStack.EMPTY;
-                }
-            } else {
-                // Если из слота сингулярности, то перемещаем в инвентарь игрока
-                if (!this.moveItemStackTo(itemstack1, 0, 36, true)) {
-                    return ItemStack.EMPTY;
-                }
-            }
-            
-            if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.EMPTY);
-            } else {
-                slot.setChanged();
-            }
-            
-            if (itemstack1.getCount() == itemstack.getCount()) {
-                return ItemStack.EMPTY;
-            }
-            
-            slot.onTake(playerIn, itemstack1);
-        }
-        
-        return itemstack;
+        // Shift‑клик don't support >:[
+        return ItemStack.EMPTY;
     }
+
 
     @Override
     public boolean stillValid(Player player) {
