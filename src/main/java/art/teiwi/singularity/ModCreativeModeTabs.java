@@ -1,4 +1,4 @@
-package com.singularity.registry;
+package art.teiwi.singularity;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -8,10 +8,9 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLBuildCreativeModeTabContentsEvent;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = Singularity.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModCreativeModeTabs {
-    
-    
+    // TODO: Creativity tab for the mod will be implemented later -_-
 }
