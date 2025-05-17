@@ -1,8 +1,12 @@
-package art.teiwi.singularity.blocks;
+package art.teiwi.singularity.blockentity;
 
+import art.teiwi.singularity.menu.SingularityMenu;
+import art.teiwi.singularity.ModBlocks;
+import art.teiwi.singularity.config.SingularityConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -14,9 +18,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraftforge.registries.ForgeRegistries;
+
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -50,7 +58,7 @@ public class SingularityBlockEntity extends BlockEntity implements MenuProvider 
     };
 
     public SingularityBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlocks.SINGULARITY_BLOCK_ENTITY.get(), pos, state);
+        super(ModBlockEntities.SINGULARITY_BLOCK_ENTITY.get(), pos, state);
         this.ownerUUID = null;
     }
 
@@ -74,22 +82,32 @@ public class SingularityBlockEntity extends BlockEntity implements MenuProvider 
         items.put(itemName, items.getOrDefault(itemName, 0) + count);
         itemProgress += count;
 
-        if (itemProgress >= SingularityConfig.MAX_PROGRESS.get()) {
-            itemProgress = SingularityConfig.MAX_PROGRESS.get();
+        if (itemProgress >= SingularityConfig.getMaxProgress()) {
+            itemProgress = SingularityConfig.getMaxProgress();
         }
 
         stack.shrink(count);
+        setChanged();
+    }
+
+    public Map<String, Integer> getItemsMap() {
+        return new HashMap<>(items);
+    }
+
+    public int getItemProgress() {
+        return itemProgress;
     }
 
     public void dropItems() {
         for (var entry : items.entrySet()) {
             String itemName = entry.getKey();
             int count = entry.getValue();
-            ItemStack stack = new ItemStack(Registry.ITEM.get(new ResourceLocation(itemName)));
+            ItemStack stack = new ItemStack(ForgeRegistries.ITEMS.getValue(ResourceLocation.parse(itemName)));
             Containers.dropItemStack(level, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), stack);
         }
         items.clear();
         itemProgress = 0;
+        setChanged();
     }
 
     // --- NBT ---
